@@ -1,3 +1,25 @@
+# live 1.5.3
+
+* Minor fix to `euclidean_kernel` function.
+* Default kernel in `fit_explanation` is now `gaussian_kernel`.
+* Order of arguments changed in `add_predictions` and `data` arguments defaults to `NULL`.
+* Variables are standardized after predictions are added, before explanation model is fitted in `fit_explanation` function.
+
+# live 1.5.2
+
+* Print functions for results of sample_locally, add_predictions and fit_explanation.
+
+# live 1.5.1
+
+* New, LIME-like method of sampling as an option in `sample_locally`.
+
+# live 1.5.0
+
+* Observations in simulated dataset can now be weighted according to their distance from the explained instance. The distance is defined by `kernel` argument to `fit_explanation` function.
+* Some variables can be excluded from sampling. This is controled via `fixed_variables` argument to `sample_locally` function.
+* Documentation was improved.
+* Object returned by `sample_locally`, `add_predictions` and `fit_explanation` functions now carry more information (mainly explained instance) so some function calls were simplified (`plot_explanation`).
+
 # live 1.4.2
 
 * Fixed bug in variable selection.
