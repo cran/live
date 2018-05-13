@@ -95,14 +95,17 @@ fit_explanation2 <- function(live_object, white_box = "regr.lm",
     stop("First call add_predictions function to add black box predictions.")
   source_data <- dplyr::select_if(live_object$data, 
                                   function(x) dplyr::n_distinct(x) > 1)
-  response_ncol <- which(colnames(live_object$data) == live_object$target)
+  source_data <- dplyr::mutate_if(source_data, is.factor, droplevels)
+  response_ncol <- which(colnames(source_data) == live_object$target)
+  
+  explained_instance <- live_object$explained_instance[, colnames(live_object$explained_instance) %in% colnames(source_data)]
   
   if(standardize) {
     source_data <- dplyr::mutate_at(source_data,
                      dplyr::vars(setdiff(1:ncol(source_data), response_ncol)),
                      function(x) {
                        if(is.numeric(x)) {
-                          as.numeric(scale(x))
+                          as.numeric(scale(x, scale = FALSE))
                        } else {
                          x
                        }
@@ -119,9 +122,9 @@ fit_explanation2 <- function(live_object, white_box = "regr.lm",
   list_learners <- suppressWarnings(mlr::listLearners(properties = "weights")$short.name) 
   if(any(grepl(gsub("classif.", "", white_box), list_learners)) | 
      any(grepl(gsub("regr.", "", white_box), list_learners))) {
-    response_ncol_instance <- which(colnames(live_object$explained_instance) == live_object$target)
-    live_weights <- calculate_weights(live_object$data[, -response_ncol], 
-                                      live_object$explained_instance[, -response_ncol_instance],
+    response_ncol_instance <- which(colnames(explained_instance) == live_object$target)
+    live_weights <- calculate_weights(source_data[, -response_ncol], 
+                                      explained_instance[, -response_ncol_instance],
                                       kernel)
     if(dplyr::n_distinct(live_weights) == 1) 
       live_weights <- NULL

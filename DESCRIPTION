@@ -1,7 +1,7 @@
 Package: live
 Type: Package
 Title: Local Interpretable (Model-Agnostic) Visual Explanations
-Version: 1.5.3
+Version: 1.5.4
 Authors@R: c(
   person("Mateusz", "Staniak", role = c("cre","aut"),
     email = "mateusz.staniak@math.uni.wroc.pl"),
@@ -27,9 +27,9 @@ VignetteBuilder: knitr
 Imports: mlr, dplyr, breakDown, data.table, forestmodel, lubridate,
         ggplot2
 NeedsCompilation: no
-Packaged: 2018-05-05 15:07:42 UTC; mtst
+Packaged: 2018-05-13 21:32:08 UTC; mtst
 Author: Mateusz Staniak [cre, aut],
   Przemysław Biecek [aut]
 Maintainer: Mateusz Staniak <mateusz.staniak@math.uni.wroc.pl>
 Repository: CRAN
-Date/Publication: 2018-05-05 15:47:30 UTC
+Date/Publication: 2018-05-13 22:06:24 UTC

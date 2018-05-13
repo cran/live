@@ -1,8 +1,8 @@
-158dc9fa3cf8bdafe1b24f2ef5b0389d *DESCRIPTION
+6886218ca8eb946f6b00ab58b23f169b *DESCRIPTION
 127cbfaba59733e6a2c6a1cb068efef0 *LICENSE
 a3900932e5a97d33d43d350dc76d016a *NAMESPACE
-b571b0cba6249f3fd5b434dd501f84ad *NEWS.md
-b0aa44a6987729ec6de219363dd79f40 *R/explain.R
+272df3ae50ef592eb812eb4a2c758961 *NEWS.md
+bcaabce9f0d5e75fc91b3adfee47e904 *R/explain.R
 98fe25dad40fe47986e4d7e68ec7c6ff *R/explore.R
 2e57b061496e2ec8a87017210e1a5288 *R/generics.R
 1dc9d2107a8493b33f41bcfe8aa02344 *R/helpers.R
@@ -16,7 +16,7 @@ d381bd270573485272e7282df7c0ba03 *data/wine.rda
 217bfbd80519433805e0f89c22abcd85 *inst/CITATION
 5d816b9a3beb7e9a809278ef9f3e75b4 *inst/doc/wine_quality.R
 3ece38fbf0a4f6e1c402dbc5f0a32818 *inst/doc/wine_quality.Rmd
-2e23234654115aa675d0eb7e5741dd12 *inst/doc/wine_quality.html
+2d09d49e0f864b2ce9af0d3f649ce302 *inst/doc/wine_quality.html
 2795b6602211b16cac650881ce7ab8ff *man/add_predictions.Rd
 0d2074dbf0fe72644791c2d3fc0937c8 *man/add_predictions2.Rd
 88c404830dada392e2c6a3911fd5db96 *man/calculate_weights.Rd

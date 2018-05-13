@@ -1,3 +1,7 @@
+# live 1.5.4
+
+* Fix bug related to column standardizing in `fit_explanation2`.
+
 # live 1.5.3
 
 * Minor fix to `euclidean_kernel` function.
