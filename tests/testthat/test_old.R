@@ -1,18 +1,5 @@
 context("Test for deprecated functions")
 
-set.seed(1)
-X <- tibble::as_tibble(MASS::mvrnorm(50, rep(0, 20), diag(1, 20)))
-
-count_diffs_in_rows <- function(table, row, explained_var) {
-  col_no <- which(colnames(row) == explained_var)
-  lapply(1:nrow(table), function(x) {
-    row_of_table <- table[x, ]
-    sum(row_of_table != row[, -col_no])
-  }) %>%
-    unlist() %>%
-    sum()
-}
-
 test_that("Any changes are made", {
   expect_gt(
     count_diffs_in_rows((live::sample_locally(data = X,
@@ -64,22 +51,37 @@ test_that("Predictions are added", {
   expect_is(local_dataset2$target, "character")
 })
 
-set.seed(1)
-X <- tibble::as_tibble(MASS::mvrnorm(50, rep(0, 10), diag(1, 10)))
-local <- live::sample_locally(data = X,
-                              explained_instance = X[3, ], 
-                              explained_var = "V1",
-                              size = 50)
-local1 <- live::add_predictions(X, local, "regr.lm")
-local_explained <- live::fit_explanation(local1, "regr.lm")
-
 test_that("White box model is fitted correctly", {
-  expect_is(local_explained, "WrappedModel")
-  expect_is(mlr::getLearnerModel(local_explained), "lm")
+  expect_error(fit_explanation2(sample_locally2(X, X[3, ], "V1", 50)))
+  expect_is(local_explained_old, "WrappedModel")
+  expect_is(mlr::getLearnerModel(local_explained_old), "lm")
+  local1_old_tmp <- local1_old
+  local1_old_tmp$data$V1 <- rep(1, 50)
+  expect_error(fit_explanation(local1_old_tmp))
+  expect_silent(fit_explanation(local1_old, response_family = "gaussian",
+                                white_box = "regr.glm"))
+  expect_error(fit_explanation(sample_locally(X, X[3, ], "V1", 50)))
 })
 
 test_that("Plots are created without problems", {
-  expect_error(live::plot_explanation(local_explained, "waterfallplot", X[3, ]), regexp = NA)
-  expect_error(live::plot_explanation(local_explained, "forestplot"), regexp = NA)
+  expect_error(live::plot_explanation(local_explained_old, "waterfallplot", X_old[3, ]), regexp = NA)
+  expect_error(live::plot_explanation(local_explained_old, "forestplot"), regexp = NA)
 })
+
+test_that("Other features", {
+  expect_silent(sample_locally(X, X[4, ], "V1", 50, TRUE))
+  Xd <- X
+  Xd$V12 <- seq(from = lubridate::ymd("2015-01-01"), 
+                to = lubridate::ymd("2020-01-01"), length.out = 500)
+  expect_silent(sample_locally(Xd, Xd[4, ], "V1", 50))
+  expect_silent(plot_explanation(local_explained2_old, explained_instance = X[3, ]))
+  expect_is(plot_explanation2(local_explained, "waterfall"), "ggplot")
+  expect_is(plot_explanation2(local_explained, "forest"), "ggplot")
+  expect_silent(plot_explanation2(local_explained2))
+  expect_is(plot_explanation2(local_explained3, "waterfall"), "ggplot")
+  expect_silent(fit_explanation(local1_old, "regr.lm", selection = TRUE))
+  expect_silent(plot_explanation(local2_explained_old, "waterfallplot", X2_old[3, ]))
+})
+
+
 

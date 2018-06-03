@@ -5,7 +5,7 @@
 \title{Generate dataset for local exploration.}
 \usage{
 sample_locally2(data, explained_instance, explained_var, size,
-  method = "live", fixed_variables = NULL)
+  method = "live", fixed_variables = NULL, ...)
 }
 \arguments{
 \item{data}{Data frame from which new dataset will be simulated.}
@@ -19,10 +19,13 @@ as in data argument. Local exploration will be performed around this observation
 
 \item{method}{If "live", new observations will be created by changing one value
 per observation. If "lime", new observation will be created by permuting  all
-columns of data.}
+columns of data. If "normal", numerical features will be sampled from multivariate
+normal distribution specified by ... arguments mu and Sigma.}
 
 \item{fixed_variables}{names or numeric indexes of columns which will not be changed
 while sampling.}
+
+\item{...}{Mean and covariance matrix for normal sampling method.}
 }
 \value{
 list consisting of
@@ -35,7 +38,7 @@ Generate dataset for local exploration.
 }
 \examples{
 \dontrun{
-dataset_for_local_exploration <- sample_locally(data = wine,
+dataset_for_local_exploration <- sample_locally2(data = wine,
                                                explained_instance = wine[5, ],
                                                explained_var = "quality",
                                                size = 50,

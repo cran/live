@@ -1,18 +1,18 @@
-#' Set date values to one value 
-#' 
+#' Set date values to one value
+#'
 #' @param data Data frame to change.
 #' @param explained_instance 1-row data frame with instance of interest.
-#' 
+#'
 
 set_constant_dates <- function(data, explained_instance) {
-  date_cols <- (1:ncol(data))[unlist(lapply(data, 
+  date_cols <- (1:ncol(data))[unlist(lapply(data,
                                             function(x) lubridate::is.Date(x) | lubridate::is.POSIXt(x)),
                                      use.names = FALSE)]
   if(length(date_cols) == 0) {
     return(data)
   } else {
     for(k in date_cols) {
-      data.table::set(data, j = as.integer(k), 
+      data.table::set(data, j = as.integer(k),
                       value = explained_instance[1, as.integer(k)])
     }
     data
@@ -58,46 +58,26 @@ generate_neighbourhood <- function(data, explained_instance, size) {
 #' @return A list containing black box model object and predictions.
 #'
 
-give_predictions <- function(data, black_box, explained_var, similar, predict_function, 
+give_predictions <- function(data, black_box, explained_var, similar, predict_function,
                              hyperpars = list(), ...) {
   if(is.character(black_box)) {
     mlr_task <- create_task(black_box, as.data.frame(data), explained_var)
     lrn <- mlr::makeLearner(black_box, par.vals = hyperpars)
     trained <- mlr::train(lrn, mlr_task)
     pred <- predict(trained, newdata = as.data.frame(similar))
-    list(model = mlr::getLearnerModel(trained), 
+    list(model = mlr::getLearnerModel(trained),
          predictions = pred[["data"]][["response"]])
   } else {
-    list(model = black_box, 
+    list(model = black_box,
          predictions = predict_function(black_box, similar, ...))
   }
 }
 
-#' Create regression or classification task.
-#'
-#' @param model Name of a used model in mlr format.
-#' @param dataset Data frame on which model will be trained.
-#' @param target_var Name of column in dataset containing explained variable.
-#'
-#' @return mlr task object
-#'
-
-create_task <- function(model, dataset, target_var) {
-  if(grepl("regr", model)) {
-    mlr::makeRegrTask(id = "lime_task",
-                      data = as.data.frame(dataset),
-                      target = target_var)
-  } else {
-    mlr::makeClassifTask(id = "lime_task",
-                         data = as.data.frame(dataset),
-                         target = target_var)
-  }
-}
 
 #' Generate dataset for local exploration.
 #
 #' DEPRECATED. Please refer to sample_locally2 function for updated and improved interface.
-#' This function will be removed in the next version of the package and was left only
+#' This function will be removed in the future and was left only
 #' to remain consistent with the examples given in https://arxiv.org/abs/1804.01955.
 #' For more, see NEWS and vignette.
 #'
@@ -122,7 +102,7 @@ create_task <- function(model, dataset, target_var) {
 #' }
 #'
 
-sample_locally <- function(data, explained_instance, explained_var, size, 
+sample_locally <- function(data, explained_instance, explained_var, size,
                            standardise = FALSE) {
   check_conditions(data, explained_instance, size)
   explained_var_col <- which(colnames(data) == explained_var)
@@ -132,7 +112,7 @@ sample_locally <- function(data, explained_instance, explained_var, size,
     vscale <- function(x) as.vector(scale(x))
     similar <- dplyr::mutate_if(similar, is.numeric, vscale)
   }
-  
+
   list(data = similar, target = explained_var)
 }
 
@@ -140,7 +120,7 @@ sample_locally <- function(data, explained_instance, explained_var, size,
 #' Add black box predictions to generated dataset
 #'
 #' DEPRECATED. Please refer to add_predictions2 function for updated and improved interface.
-#' This function will be removed in the next version of the package and was left only
+#' This function will be removed in the future and was left only
 #' to remain consistent with the examples given in https://arxiv.org/abs/1804.01955.
 #' For more, see NEWS and vignette.
 #'
@@ -171,7 +151,7 @@ sample_locally <- function(data, explained_instance, explained_var, size,
 #' }
 #'
 
-add_predictions <- function(data, to_explain, black_box_model, predict_fun = predict, 
+add_predictions <- function(data, to_explain, black_box_model, predict_fun = predict,
                             hyperparams = list(), ...) {
   trained_black_box <- give_predictions(data = data,
                                         black_box = black_box_model,
@@ -181,31 +161,28 @@ add_predictions <- function(data, to_explain, black_box_model, predict_fun = pre
                                         hyperpars = hyperparams,
                                         ...)
   to_explain$data[[to_explain$target]] <- trained_black_box$predictions
-  
-  list(data = to_explain$data, target = to_explain$target, 
+
+  list(data = to_explain$data, target = to_explain$target,
        model = trained_black_box$model)
 }
 
 
-
-
-
 #' Fit white box model to the simulated data.
-#' 
+#'
 #' DEPRECATED. Please refer to fit_explanation2 function for updated and improved interface.
-#' This function will be removed in the next version of the package and was left only
+#' This function will be removed in the future and was left only
 #' to remain consistent with the examples given in https://arxiv.org/abs/1804.01955.
 #' For more, see NEWS and vignette.
-#' 
+#'
 #' @param live_object List return by add_predictions function.
 #' @param white_box String, learner name recognized by mlr package.
 #' @param selection If TRUE, variable selection based on glmnet implementation of LASSO
 #'        will be performed.
 #' @param response_family family argument to glmnet (and then glm) function.
-#'                        Default value is "gaussian" 
+#'                        Default value is "gaussian"
 #' @param predict_type Argument passed to mlr::makeLearner() argument "predict.type".
 #'                     Defaults to "response".
-#' @param hyperpars Optional list of values of hyperparameteres of a model.                   
+#' @param hyperpars Optional list of values of hyperparameteres of a model.
 #'
 #' @return mlr object returned by train function.
 #'
@@ -220,34 +197,15 @@ add_predictions <- function(data, to_explain, black_box_model, predict_fun = pre
 fit_explanation <- function(live_object, white_box, selection = FALSE,
                             response_family = "gaussian",
                             predict_type = "response", hyperpars = list()) {
-  if(dplyr::n_distinct(live_object$data[[live_object$target]]) == 1)
-    stop("All predicted values were equal.")
   if(!(any(colnames(live_object$data) == live_object$target)))
     stop("First call add_predictions function to add black box predictions.")
-  
+  if(dplyr::n_distinct(live_object$data[[live_object$target]]) == 1)
+    stop("All predicted values were equal.")
+
   if(selection) {
-    form <- as.formula(paste(live_object$target, "~."))
-    explained_var_col <- which(colnames(live_object$data) == live_object$target)
-    lasso_fit <- glmnet::cv.glmnet(model.matrix(form, data = live_object$data),
-                                   as.matrix(live_object$data[, explained_var_col]),
-                                   family = response_family,
-                                   nfolds = 5, alpha = 1)
-    coefs_lasso <- glmnet::coef.cv.glmnet(lasso_fit)
-    nonzero_coefs <- row.names(coefs_lasso)[which(as.numeric(coefs_lasso) != 0)]
-    nonzero_coefs <- nonzero_coefs[nonzero_coefs != "(Intercept)"]
-    factors <- colnames(live_object$data)[sapply(live_object$data, 
-                                                 function(x) is.character(x) | is.factor(x))]
-    selected_vars <- colnames(live_object$data)[colnames(live_object$data) %in% nonzero_coefs]
-    
-    if(length(factors) != 0) {
-      selected_vars <- selected_vars[!is.na(selected_vars)]
-      factors_lasso <- setdiff(nonzero_coefs, selected_vars)
-      selected_factors_lgl <- sapply(factors, function(x) any(grepl(x, factors_lasso)))
-      selected_factors <- names(selected_factors_lgl)[selected_factors_lgl]
-      selected_vars <- c(selected_vars, 
-                         selected_factors)
-    }
-    
+    selected_vars <- select_variables(live_object$data, 
+                                      live_object$target, 
+                                      response_family)
   } else {
     selected_vars <- colnames(live_object$data)
   }
@@ -256,36 +214,34 @@ fit_explanation <- function(live_object, white_box, selection = FALSE,
                           live_object$data[, unique(c(selected_vars, live_object$target))],
                           live_object$target)
   if(grepl("glm", white_box) & !(response_family == "poisson" | response_family == "binomial")) {
-    hyperpars <- c(hyperpars, family = response_family)  
+    hyperpars <- c(hyperpars, family = response_family)
   }
   lrn <- mlr::makeLearner(white_box, predict.type = predict_type, par.vals = hyperpars)
-  
+
   mlr::train(lrn, mlr_task)
 }
 
 
 #' Waterfall plot or forestplot for lm/glm explanations.
 #'
+#' DEPRECATED
+#'
 #' @param plot_type Chr, "forestplot" or "waterfallplot" depending
 #'                  on which type of plot is to be created.
 #' @param fitted_model glm or lm object.
 #' @param explained_instance Observation around which model was fitted.
-#' @param scale Only for classification problems, "logit" or "probability".
+#' @param classif logical, if TRUE, probabilities will be plotted 
 #'
 #' @return plot (ggplot2 or lattice)
 #'
 
-plot_regression <- function(plot_type, fitted_model, explained_instance, scale = NULL) {
+plot_regression <- function(plot_type, fitted_model, explained_instance, classif) {
   if(plot_type == "forestplot") {
     forestmodel::forest_model(fitted_model)
   } else {
-    if(scale == "probability") {
+    if(classif) {
       plot(breakDown::broken(fitted_model, explained_instance, baseline = "intercept"),
-           trans = function(x) exp(x)/(1 + exp(x))) +
-        ggplot2::scale_y_continuous(limits = c(0, 1), 
-                                    name = "probability", 
-                                    expand = c(0, 0))
-      
+           trans = function(x) exp(x)/(1 + exp(x)))
     } else {
       plot(breakDown::broken(fitted_model, explained_instance, baseline = "intercept"))
     }
@@ -295,8 +251,8 @@ plot_regression <- function(plot_type, fitted_model, explained_instance, scale =
 
 #' Plotting white box models.
 #'
-#' DEPRECATED. Please refer to plot_explanation2 function for updated and improved interface.
-#' This function will be removed in the next version of the package and was left only
+#' DEPRECATED. Please refer to generic plot function for updated and improved interface.
+#' This function will be removed in the future and was left only
 #' to remain consistent with the examples given in https://arxiv.org/abs/1804.01955.
 #' For more, see NEWS and vignette.
 #'
@@ -306,8 +262,6 @@ plot_regression <- function(plot_type, fitted_model, explained_instance, scale =
 #'                       if lm/glm model is used as interpretable approximation.
 #' @param explained_instance Observation around which model was fitted.
 #'                           Needed only if waterfall plot is drawn.
-#' @param scale When probabilities are predicted, they can be plotted or "logit" scale 
-#'              or "probability" scale.
 #'
 #' @return plot (ggplot2 or base)
 #'
@@ -324,11 +278,49 @@ plot_regression <- function(plot_type, fitted_model, explained_instance, scale =
 #' }
 #'
 
-plot_explanation <- function(model, regr_plot_type = NULL, explained_instance = NULL,
-                             scale = "logit") {
+plot_explanation <- function(model, regr_plot_type = NULL, explained_instance = NULL) {
   trained_model <- mlr::getLearnerModel(model)
+  classif <- model$learner$type == "classif"
+  
   if(any(grepl("lm", class(trained_model)))) {
-    plot_regression(regr_plot_type, trained_model, explained_instance, scale)
+    plot_regression(regr_plot_type, trained_model, explained_instance, classif)
+  } else {
+    plot(trained_model)
+  }
+}
+
+#' Plotting white box models.
+#'
+#' DEPRECATED. Please refer to the generic plot function.
+#'
+#' @param explained_model List returned by fit_explanation function.
+#' @param regr_plot_type Chr, "forest" or "waterfall" depending
+#'                       on which type of plot is to be created.
+#'                       if lm/glm model is used as interpretable approximation.
+#'
+#' @return plot (ggplot2 or base)
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Forest plot for regression
+#' plot_explanation(fitted_explanation1, "forest", wine[5, ])
+#' # Waterfall plot
+#' plot_explanation(fitted_explanation1, "waterfall", wine[5, ])
+#' # Plot decision tree
+#' plot_explanation(fitted_explanation2)
+#' }
+#'
+
+plot_explanation2 <- function(explained_model, regr_plot_type = NULL) {
+  trained_model <- mlr::getLearnerModel(explained_model$model)
+  present_variables <- colnames(explained_model$data)
+  explained_instance <- explained_model$explained_instance[, present_variables]
+  classif <- explained_model$model$learner$type == "classif"
+  
+  if(any(grepl("lm", class(trained_model)))) {
+    plot_regression2(regr_plot_type, trained_model, explained_instance, classif)
   } else {
     plot(trained_model)
   }

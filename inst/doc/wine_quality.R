@@ -12,21 +12,21 @@ wine[5, ]
 wine_svm <- e1071::svm(quality ~., data = wine)
 
 similar <- sample_locally2(data = wine,
-                          explained_instance = wine[5, ],
-                          explained_var = "quality",
-                          size = 500)
+                           explained_instance = wine[5, ],
+                           explained_var = "quality",
+                           size = 500)
 
 ## ----add, warning = FALSE, message = FALSE-------------------------------
 similar1 <- add_predictions2(to_explain = similar,
-                            black_box_model = wine_svm)
+                             black_box_model = wine_svm)
 
 ## ----explanation, warning = FALSE, message = FALSE-----------------------
 wine_expl <- fit_explanation2(live_object = similar1,
-                             white_box = "regr.lm")
+                              white_box = "regr.lm")
 
 ## ----forestplot, warning = FALSE, message = FALSE, fig.width = 7---------
-plot_explanation2(wine_expl, "forest")
+plot(wine_expl, type = "forest")
 
 ## ----waterfallplot, warning = FALSE, message = FALSE, fig.width = 7------
-plot_explanation2(wine_expl, "waterfall")
+plot(wine_expl, type = "waterfall")
 

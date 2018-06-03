@@ -10,10 +10,7 @@
 #' \code{\link{sample_locally2}} generates a dataset that will be used for local exploration.
 #' \code{\link{add_predictions2}} adds black box model predictions to simulated dataset.
 #' \code{\link{fit_explanation2}} fits a chosen white box model to simulated dataset.
-#' \code{\link{plot_explanation2}} visualizes fitted model.
-#' 
-#' Older versions of these function (with the "2" suffix) were kept in this release for
-#' consistency with examples from https://arxiv.org/abs/1804.01955.
+#' \code{\link{plot}} visualizes fitted model.
 #'
 #' @section Example datasets:
 #' \code{wine} Data on wine quality taken from

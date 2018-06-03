@@ -4,7 +4,7 @@
 \alias{plot_regression2}
 \title{Waterfall plot or forestplot for lm/glm explanations.}
 \usage{
-plot_regression2(plot_type, fitted_model, explained_instance, scale = NULL)
+plot_regression2(plot_type, fitted_model, explained_instance, classif)
 }
 \arguments{
 \item{plot_type}{Chr, "forest" or "waterfall" depending
@@ -14,7 +14,7 @@ on which type of plot is to be created.}
 
 \item{explained_instance}{Observation around which model was fitted.}
 
-\item{scale}{Only for classification problems, "logit" or "probability".}
+\item{classif}{logical, if TRUE, probabilities will be plotted}
 }
 \value{
 plot (ggplot2 or lattice)

@@ -1,6 +1,18 @@
+# live 1.5.7
+
+* New method of sampling ("normal").
+
+# 1ive 1.5.6
+
+* Waterfall plots can be viewed in a Shiny app.
+
+# live 1.5.5
+
+* Fixed bug related to standardizing columns in `fit_explanation`.
+
 # live 1.5.4
 
-* Fix bug related to column standardizing in `fit_explanation2`.
+* Old interface dropped.
 
 # live 1.5.3
 
