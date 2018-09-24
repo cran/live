@@ -1,3 +1,10 @@
+# live 1.5.8
+
+* Allow setting seed before sampling in `sample_locally2` to make results reproducible.
+* Add new explainer: `local_permutation_importance` function.
+* Fixed problems with mlr dependency.
+* Add shortcut function for DALEX explainers: `local_approximation`.
+
 # live 1.5.7
 
 * New method of sampling ("normal").

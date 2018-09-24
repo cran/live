@@ -10,7 +10,7 @@
 
 ## Installation
 
-Install stable CRAN version:
+To get started, install stable CRAN version:
 
 ```
 install.packages("live")
@@ -26,8 +26,6 @@ devtools::install_github("MI2DataLab/live")
 
 Features coming up next:
 
-  * more methods of sampling,
-  
   * better support for comparing explanations for different models / different instances,
   
   * improved Shiny application (see `live_shiny` function in development version).
@@ -41,7 +39,7 @@ Find the paper about `live` and [breakDown](https://github.com/pbiecek/breakDown
 
 Website: https://mi2datalab.github.io/live/
 
-Conference talk on `live`: https://github.com/mstaniak/Berlin_2017
+Conference talks on `live`: [Wrocław 2018](https://github.com/mstaniak/Talks/raw/master/2018/Wroclaw_IX.pdf), [Berlin 2017](https://github.com/mstaniak/Berlin_2017). 
 
 Python implementation of LIME and info about the method: https://github.com/marcotcr/lime
 
