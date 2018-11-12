@@ -2,15 +2,17 @@
 #'
 #' This package aims to help locally fit and visualize interpretable models similarly to LIME methodology.
 #' Interface provided by mlr package is used. Tools are provided to create a simulated dataset of
-#' similar observations, fit a chosen white box models (GLM and CART in particular) and visualize
+#' similar observations, fit chosen white box models (GLM and CART in particular) and visualize
 #' them. The methodology is based on Tulio Ribeiro, Singh, Guestrin (2016) <doi:10.1145/2939672.2939778>.
 #' More details can be found in Staniak, Biecek (2018) https://arxiv.org/abs/1804.01955.
 #'
 #' @section Important functions:
-#' \code{\link{sample_locally2}} generates a dataset that will be used for local exploration.
-#' \code{\link{add_predictions2}} adds black box model predictions to simulated dataset.
-#' \code{\link{fit_explanation2}} fits a chosen white box model to simulated dataset.
-#' \code{\link{plot}} visualizes fitted model.
+#' \code{\link{sample_locally}} generates a dataset that will be used for local exploration.
+#' \code{\link{add_predictions}} adds black box model predictions to simulated dataset.
+#' \code{\link{fit_explanation}} fits a chosen white box model to simulated dataset.
+#' generic \code{\link{plot}} function visualizes fitted model.
+#' \code{\link{local_approximation}} function can be used with DALEX explainers to perform 
+#' all the steps of local model exploration.
 #'
 #' @section Example datasets:
 #' \code{wine} Data on wine quality taken from
@@ -30,3 +32,6 @@ NULL
 #' Modeling wine preferences by data mining from physicochemical properties.
 #' In Decision Support Systems, Elsevier, 47(4):547-553, 2009.
 "wine"
+
+#' @importFrom data.table as.data.table rbindlist
+#' @importFrom stats as.formula model.matrix

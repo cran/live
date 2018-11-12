@@ -1,3 +1,9 @@
+# live 1.5.9
+
+* Dropped old interface.
+* Improved distance calculations.
+* ... argument added to `plot`.
+
 # live 1.5.8
 
 * Allow setting seed before sampling in `sample_locally2` to make results reproducible.

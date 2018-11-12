@@ -11,9 +11,9 @@
 #' while fitting the local model. Defaults to "response"
 #' @param kernel_type Function which will be used to calculate distances from
 #' simulated observation to explained instance
-#' @param ... Arguments to be passed to sample_locally2 function
+#' @param ... Arguments to be passed to sample_locally function
 #' 
-#' @return object of class live_explainer. More details in fit_explanation2 function help.
+#' @return object of class live_explainer. More details in fit_explanation function help.
 #'
 #' @export
 #' 
@@ -35,17 +35,17 @@ local_approximation <- function(explainer, observation, target_variable_name,
                                 predict_type = "response",
                                 kernel_type = gaussian_kernel, ...) {
   
-  neighbourhood <- sample_locally2(explainer$data,
-                                   observation,
-                                   target_variable_name,
-                                   n_new_obs,
-                                   ...)
-  with_predictions <- add_predictions2(neighbourhood,
-                                       explainer$model,
-                                       predict_fun = explainer$predict_function)
-  live::fit_explanation2(with_predictions,
-                         white_box = local_model,
-                         selection = select_variables,
-                         predict_type = predict_type,
-                         kernel = kernel_type)
+  neighbourhood <- sample_locally(explainer$data,
+                                  observation,
+                                  target_variable_name,
+                                  n_new_obs,
+                                  ...)
+  with_predictions <- add_predictions(neighbourhood,
+                                      explainer$model,
+                                      predict_fun = explainer$predict_function)
+  live::fit_explanation(with_predictions,
+                        white_box = local_model,
+                        selection = select_variables,
+                        predict_type = predict_type,
+                        kernel = kernel_type)
 }

@@ -1,35 +1,21 @@
-#' Calculate weights for explanation model
-#'
-#' @param simulated_dataset Dataset simulated by sample_locally function.
-#' @param explained_instance Instance to be explained.
-#' @param kernel Chosen kernel function.
-#'
-#' @return Numeric vector of weights for each row in simulated dataset.
-#'
-
-calculate_weights <- function(simulated_dataset, explained_instance, kernel) {
+calculate_weights <- function(simulated_dataset, explained_instance, kernel, sds) {
   for_weights_x <- dplyr::bind_rows(simulated_dataset, explained_instance)
   for_weights_x <- dplyr::mutate_if(for_weights_x, is.character, as.factor)
   proxy_response <- rep(1, nrow(for_weights_x))
   for_weights <- dplyr::bind_cols(y = proxy_response, for_weights_x)
-  proxy_model <- stats::lm(y ~., data = for_weights)
-  model_matrix <- stats::model.matrix(proxy_model)
+  model_matrix <- stats::model.matrix(stats::lm(y ~., data = for_weights))
+  model_matrix_numeric <- model_matrix[, colnames(model_matrix) %in% colnames(simulated_dataset)]
+  model_matrix_factor <- model_matrix[, !(colnames(model_matrix) %in% colnames(simulated_dataset))]
+  for(column in colnames(model_matrix_numeric)) {
+    model_matrix_numeric[, column] <- model_matrix_numeric[, column]/sds[column]
+  }
+  model_matrix <- cbind(model_matrix_numeric, model_matrix_factor)
   explained_instance_coords <- model_matrix[nrow(model_matrix), ]
-  other_observations_coords <- model_matrix[1:(nrow(model_matrix) - 1), ]
-  sapply(as.data.frame(t(other_observations_coords)),
+  sapply(as.data.frame(t(model_matrix[1:(nrow(model_matrix) - 1), ])),
          function(x) kernel(explained_instance_coords, x))
 }
 
-#' Select variables for explanation model.
-#'
-#' @param source_data Simulated dataset.
-#' @param target Name of the response variable.
-#' @param response_family Name of distribution family to be used in lasso/glm fit.
-#'
-#' @importFrom stats as.formula model.matrix
-#'
-#' @return Character vector of names of selected variables
-#'
+#' @importFrom stats model.matrix as.formula
 
 select_variables <- function(source_data, target, response_family) {
   form <- as.formula(paste(target, "~."))
@@ -73,10 +59,12 @@ select_variables <- function(source_data, target, response_family) {
 #'        Defaults to "response".
 #' @param hyperpars Optional list of values of hyperparameteres of a model.
 #'
-#' @return List consting of
+#' @return List of class "live_explainer" that consists of
 #' \item{data}{Dataset used to fit explanation model (may have less column than the original)}
 #' \item{model}{Fitted explanation model}
 #' \item{explained_instance}{Instance that is being explained}
+#' \item{weights}{Weights used in model fitting}
+#' \item{selected_variables}{Names of selected variables}
 #'
 #' @export
 #'
@@ -84,11 +72,11 @@ select_variables <- function(source_data, target, response_family) {
 #'
 #' @examples
 #' \dontrun{
-#' fitted_explanation <- fit_explanation2(local_exploration1, "regr.lm", selection = TRUE)
+#' fitted_explanation <- fit_explanation(local_exploration1, "regr.lm", selection = TRUE)
 #' }
 #'
 
-fit_explanation2 <- function(live_object, white_box = "regr.lm",
+fit_explanation <- function(live_object, white_box = "regr.lm",
                             kernel = gaussian_kernel, standardize = FALSE,
                             selection = FALSE, response_family = "gaussian",
                             predict_type = "response", hyperpars = list()) {
@@ -128,7 +116,7 @@ fit_explanation2 <- function(live_object, white_box = "regr.lm",
     response_ncol_instance <- which(colnames(explained_instance) == live_object$target)
     live_weights <- calculate_weights(source_data[, -response_ncol],
                                       explained_instance[, -response_ncol_instance],
-                                      kernel)
+                                      kernel, live_object$sdeviations)
     if(dplyr::n_distinct(live_weights) == 1)
       live_weights <- NULL
   } else {

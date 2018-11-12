@@ -1,16 +1,4 @@
-#' LIME: sampling for local exploration by changing one value per observation.
-#'
-#' @param data Data frame from which observations will be generated.
-#' @param explained_instance A row in an original data frame (as a data.frame).
-#' @param size Number of observations to be generated.
-#' @param fixed_variables Names of column which will not be changed while sampling.
-#' @param seed Seed to set before sampling. If NULL, results will not be reproducible.
-#'
-#' @return data.frame
-#'
-#'
-
-generate_neighbourhood2 <- function(data, explained_instance, size, fixed_variables, seed = NULL) {
+generate_neighbourhood <- function(data, explained_instance, size, fixed_variables, seed = NULL) {
   data <- data.table::as.data.table(data)
   neighbourhood <- data.table::rbindlist(lapply(1:size, function(x) explained_instance))
   if(!is.null(seed)) {
@@ -24,13 +12,6 @@ generate_neighbourhood2 <- function(data, explained_instance, size, fixed_variab
   as.data.frame(set_constant_variables(neighbourhood, explained_instance, fixed_variables))
 }
 
-
-#' LIME: sampling for local exploration by permuting all columns.
-#'
-#' @inheritParams generate_neighbourhood2
-#'
-#' @return data frame
-#'
 
 permutation_neighbourhood <- function(data, explained_instance, size, fixed_variables, seed = NULL) {
   neighbourhood <- data.table::rbindlist(lapply(1:size, function(x)
@@ -46,16 +27,7 @@ permutation_neighbourhood <- function(data, explained_instance, size, fixed_vari
   as.data.frame(set_constant_variables(neighbourhood, explained_instance, fixed_variables))
 }
 
-#' LIME: sampling for local exploration using normal distribution.
-#'
-#' @inheritParams generate_neighbourhood2 
-#' @param ... Mean and covariance matrix for the normal distribution.
-#' 
-#' @importFrom data.table as.data.table rbindlist 
 #' @importFrom utils head
-#' 
-#' @return data.frame
-#' 
 
 normal_neighbourhood <- function(data, explained_instance, size, fixed_variables, seed = NULL, ...) {
   
@@ -71,9 +43,9 @@ normal_neighbourhood <- function(data, explained_instance, size, fixed_variables
 
   if(ncol(categorical_features) > 0) {
     if(size <= nrow(categorical_features)) {
-      categorical_features <- as.data.table(head(categorical_features, size))
+      categorical_features <- data.table::as.data.table(head(categorical_features, size))
     } else {
-      categorical_features <- as.data.table(rbindlist(lapply(1:size, 
+      categorical_features <- data.table::as.data.table(data.table::rbindlist(lapply(1:size, 
                                 function(x) categorical_features[1, , drop = FALSE])))
     }
     
