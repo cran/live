@@ -1,7 +1,7 @@
 Package: live
 Type: Package
 Title: Local Interpretable (Model-Agnostic) Visual Explanations
-Version: 1.5.9
+Version: 1.5.10
 Authors@R: c(
   person("Mateusz", "Staniak", role = c("cre","aut"),
     email = "mateusz.staniak@math.uni.wroc.pl"),
@@ -24,12 +24,12 @@ RoxygenNote: 6.1.0
 Depends: R (>= 3.0.2),
 Suggests: knitr, rmarkdown, testthat, glmnet, covr, DALEX
 VignetteBuilder: knitr
-Imports: mlr, dplyr, breakDown, data.table, forestmodel, lubridate,
-        shiny, MASS, ggplot2, gower, e1071
+Imports: mlr, dplyr, breakDown, data.table, forestmodel, shiny, MASS,
+        ggplot2, gower, e1071
 NeedsCompilation: no
-Packaged: 2018-11-12 13:43:04 UTC; mstaniak
+Packaged: 2019-02-28 11:20:31 UTC; mstaniak
 Author: Mateusz Staniak [cre, aut],
   Przemysław Biecek [aut]
 Maintainer: Mateusz Staniak <mateusz.staniak@math.uni.wroc.pl>
 Repository: CRAN
-Date/Publication: 2018-11-12 15:00:02 UTC
+Date/Publication: 2019-02-28 13:00:03 UTC
