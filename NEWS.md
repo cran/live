@@ -1,3 +1,7 @@
+# live 1.5.11
+
+* Update after changes in glmnet.
+
 # live 1.5.10
 
 * Updated CITATION.

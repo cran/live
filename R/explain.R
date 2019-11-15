@@ -15,7 +15,7 @@ calculate_weights <- function(simulated_dataset, explained_instance, kernel, sds
          function(x) kernel(explained_instance_coords, x))
 }
 
-#' @importFrom stats model.matrix as.formula
+#' @importFrom stats model.matrix as.formula coef
 
 select_variables <- function(source_data, target, response_family) {
   form <- as.formula(paste(target, "~."))
@@ -24,7 +24,7 @@ select_variables <- function(source_data, target, response_family) {
                                  as.matrix(source_data[, explained_var_col]),
                                  family = response_family,
                                  nfolds = 5, alpha = 1)
-  coefs_lasso <- glmnet::coef.cv.glmnet(lasso_fit)
+  coefs_lasso <- coef(lasso_fit)
   nonzero_coefs <- row.names(coefs_lasso)[which(as.numeric(coefs_lasso) != 0)]
   nonzero_coefs <- nonzero_coefs[nonzero_coefs != "(Intercept)"]
   factors <- colnames(source_data)[sapply(source_data,
