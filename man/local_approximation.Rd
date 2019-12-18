@@ -4,9 +4,17 @@
 \alias{local_approximation}
 \title{Fit local model around the observation: shortcut for DALEX explainer objects}
 \usage{
-local_approximation(explainer, observation, target_variable_name,
-  n_new_obs, local_model = "regr.lm", select_variables = F,
-  predict_type = "response", kernel_type = gaussian_kernel, ...)
+local_approximation(
+  explainer,
+  observation,
+  target_variable_name,
+  n_new_obs,
+  local_model = "regr.lm",
+  select_variables = F,
+  predict_type = "response",
+  kernel_type = gaussian_kernel,
+  ...
+)
 }
 \arguments{
 \item{explainer}{a model to be explained, preprocessed by the DALEX::explain function}

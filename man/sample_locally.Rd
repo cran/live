@@ -4,8 +4,16 @@
 \alias{sample_locally}
 \title{Generate dataset for local exploration.}
 \usage{
-sample_locally(data, explained_instance, explained_var, size,
-  method = "live", fixed_variables = NULL, seed = NULL, ...)
+sample_locally(
+  data,
+  explained_instance,
+  explained_var,
+  size,
+  method = "live",
+  fixed_variables = NULL,
+  seed = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{Data frame from which new dataset will be simulated.}

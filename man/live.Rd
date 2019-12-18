@@ -3,7 +3,6 @@
 \docType{package}
 \name{live}
 \alias{live}
-\alias{live-package}
 \title{live: visualizing interpretable models to explain black box models.}
 \description{
 This package aims to help locally fit and visualize interpretable models similarly to LIME methodology.

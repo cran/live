@@ -4,8 +4,14 @@
 \alias{add_predictions}
 \title{Add black box predictions to generated dataset}
 \usage{
-add_predictions(to_explain, black_box_model, data = NULL,
-  predict_fun = predict, hyperparams = list(), ...)
+add_predictions(
+  to_explain,
+  black_box_model,
+  data = NULL,
+  predict_fun = predict,
+  hyperparams = list(),
+  ...
+)
 }
 \arguments{
 \item{to_explain}{List return by sample_locally function.}

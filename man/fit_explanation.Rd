@@ -4,10 +4,16 @@
 \alias{fit_explanation}
 \title{Fit white box model to the simulated data.}
 \usage{
-fit_explanation(live_object, white_box = "regr.lm",
-  kernel = gaussian_kernel, standardize = FALSE, selection = FALSE,
-  response_family = "gaussian", predict_type = "response",
-  hyperpars = list())
+fit_explanation(
+  live_object,
+  white_box = "regr.lm",
+  kernel = gaussian_kernel,
+  standardize = FALSE,
+  selection = FALSE,
+  response_family = "gaussian",
+  predict_type = "response",
+  hyperpars = list()
+)
 }
 \arguments{
 \item{live_object}{List return by add_predictions function.}

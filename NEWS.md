@@ -1,3 +1,7 @@
+# live 1.5.12
+
+* Fixes issues on Windows.
+
 # live 1.5.11
 
 * Update after changes in glmnet.
