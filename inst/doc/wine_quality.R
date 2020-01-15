@@ -21,12 +21,18 @@ similar1 <- add_predictions(to_explain = similar,
                             black_box_model = wine_svm)
 
 ## ----explanation, warning = FALSE, message = FALSE----------------------------
-wine_expl <- fit_explanation(live_object = similar1,
-                             white_box = "regr.lm")
+if(require('RWeka')) {
+    wine_expl <- fit_explanation(live_object = similar1,
+                                 white_box = "regr.lm")
+}
 
 ## ----forestplot, warning = FALSE, message = FALSE, fig.width = 7--------------
-plot(wine_expl, type = "forest")
+if(require('RWeka')) {
+    plot(wine_expl, type = "forest")    
+}
 
 ## ----waterfallplot, warning = FALSE, message = FALSE, fig.width = 7-----------
-plot(wine_expl, type = "waterfall")
+if(require('RWeka')) {
+    plot(wine_expl, type = "waterfall")
+}
 

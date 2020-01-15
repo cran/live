@@ -71,8 +71,10 @@ If a `mlr` name of a black box model is passed, dataset to train the model needs
 Once the artificial data points around the case of interest are generated, we may fit the white box model to them. Here we fit linear regression model using `fit_explanation` function.
 
 ```{r explanation, warning = FALSE, message = FALSE}
-wine_expl <- fit_explanation(live_object = similar1,
-                             white_box = "regr.lm")
+if(require('RWeka')) {
+    wine_expl <- fit_explanation(live_object = similar1,
+                                 white_box = "regr.lm")
+}
 ```
 
 
@@ -95,13 +97,17 @@ Two special plots are available for regression problems.
 *Forest plot* from `forestmodel` package focuses on the local structure of the model by plotting estimates of the regressions coefficients along with confidence intervals and p-values.
 
 ```{r forestplot, warning = FALSE, message = FALSE, fig.width = 7}
-plot(wine_expl, type = "forest")
+if(require('RWeka')) {
+    plot(wine_expl, type = "forest")    
+}
 ```
 
 *Break Down Plots* or waterfall plots from `breakDown` package display how predictors contribute to the prediction. For details see `breakDown` documentation.
 
 ```{r waterfallplot, warning = FALSE, message = FALSE, fig.width = 7}
-plot(wine_expl, type = "waterfall")
+if(require('RWeka')) {
+    plot(wine_expl, type = "waterfall")
+}
 ```
 
 

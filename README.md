@@ -40,6 +40,6 @@ Find the paper about `live` and [breakDown](https://github.com/pbiecek/breakDown
 
 Website: https://mi2datalab.github.io/live/
 
-Conference talks on `live`: [Wrocław 2018](https://github.com/mstaniak/Talks/raw/master/2018/Wroclaw_IX.pdf), [Berlin 2017](https://github.com/mstaniak/Berlin_2017). 
+Conference talks on `live`: [Wrocław 2018](https://github.com/mstaniak/Talks/raw/master/2018/Wroclaw_IX.pdf), [Berlin 2017](https://github.com/mstaniak/Talks/blob/master/2017/Berlin.pdf). 
 
 Python implementation of LIME and info about the method: https://github.com/marcotcr/lime

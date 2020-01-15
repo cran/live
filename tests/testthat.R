@@ -13,8 +13,10 @@ local <- sample_locally(data = X,
                          explained_var = "V1",
                          size = 50)
 local1 <- add_predictions(local, "regr.svm", X)
-local_explained <- fit_explanation(local1, "regr.lm")
-local_explained2 <- fit_explanation(local1, "regr.svm", kernel = identity_kernel)
+if(require('RWeka')) {
+  local_explained <- fit_explanation(local1, "regr.lm")
+  local_explained2 <- fit_explanation(local1, "regr.svm", kernel = identity_kernel)
+}
 
 X_old <- X
 X2_old <- X_old
@@ -23,7 +25,9 @@ X2_old$V1 <- as.factor(as.character(X2_old$V1 > 0.5))
 local2 <- sample_locally(data = X2, explained_instance = X2[3, ],
                           explained_var = "V1", size = 500)
 local3 <- add_predictions(local2, "classif.svm", X2)
-local_explained3 <- fit_explanation(local3, "classif.logreg", predict_type = "prob")
+if(require('RWeka')) {
+  local_explained3 <- fit_explanation(local3, "classif.logreg", predict_type = "prob")
+}
 
 X$V3 <- as.factor(as.character(round(X$V3)))
 local4 <- sample_locally(data = X,

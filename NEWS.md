@@ -1,3 +1,7 @@
+# live 1.5.13
+
+* Attempted fix for Solaris issues.
+
 # live 1.5.12
 
 * Fixes issues on Windows.
